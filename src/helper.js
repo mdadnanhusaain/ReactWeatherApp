@@ -4,7 +4,7 @@ let getCity = async (position) => {
   let limit = 1;
   let lat = position.coords.latitude;
   let lon = position.coords.longitude;
-  let url = `http://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=${limit}&appid=${env.VITE_API_KEY}`;
+  let url = `https://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=${limit}&appid=${env.VITE_API_KEY}`;
   try {
     let response = await fetch(url);
     let jsonRes = await response.json();
