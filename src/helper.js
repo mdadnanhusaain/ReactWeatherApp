@@ -1,10 +1,12 @@
-let env = import.meta.env;
+let api_key = import.meta.env.VITE_API_KEY;
+let vite_unsplash = import.meta.env.VITE_UNSPLASH;
 
 let getCity = async (position) => {
   let limit = 1;
   let lat = position.coords.latitude;
   let lon = position.coords.longitude;
-  let url = `https://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=${limit}&appid=${env.VITE_API_KEY}`;
+  console.log(api_key);
+  let url = `https://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=${limit}&appid=${api_key}`;
   try {
     let response = await fetch(url);
     let jsonRes = await response.json();
@@ -17,7 +19,8 @@ let getCity = async (position) => {
 };
 
 let searchPhotos = async (searchQuery) => {
-  let url = `https://api.unsplash.com/search/photos?page=1&perPage=1&query=${searchQuery}&client_id=${env.VITE_UNSPLASH}&total=1`;
+  console.log(vite_unsplash);
+  let url = `https://api.unsplash.com/search/photos?page=1&perPage=1&query=${searchQuery}&client_id=${vite_unsplash}&total=1`;
   let res = await fetch(url);
   let jRes = await res.json();
   let num = Math.floor(Math.random() * 10);
@@ -29,7 +32,7 @@ let searchPhotos = async (searchQuery) => {
 };
 
 let getWeatherByCity = async (city, updateInfo) => {
-  let API_URL = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${env.VITE_API_KEY}&units=metric`;
+  let API_URL = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${api_key}&units=metric`;
   try {
     let response = await fetch(API_URL);
     let jsonResponse = await response.json();
@@ -44,7 +47,7 @@ let getWeatherByCity = async (city, updateInfo) => {
 let getWeatherByCord = async (position, city, updateInfo) => {
   let lat = position.coords.latitude;
   let lon = position.coords.longitude;
-  let API_URL = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${env.VITE_API_KEY}&units=metric`;
+  let API_URL = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${api_key}&units=metric`;
   try {
     let response = await fetch(API_URL);
     let jsonResponse = await response.json();
