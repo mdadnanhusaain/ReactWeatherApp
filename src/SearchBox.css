@@ -1,0 +1,12 @@
+.SearchBox {
+  margin-bottom: 1.5rem;
+}
+
+.error {
+  margin: 2rem 0 0.5rem;
+}
+
+#outlined-basic {
+  background-color: #fff;
+  border-radius: 0.5rem;
+}

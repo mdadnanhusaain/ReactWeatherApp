@@ -1,0 +1,5 @@
+.infoBox {
+  box-shadow: 0 0 0.5rem black;
+  /* border: 1px solid black; */
+  border-radius: 0.1rem;
+}
