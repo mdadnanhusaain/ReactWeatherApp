@@ -5,8 +5,6 @@ import Alert from "@mui/material/Alert";
 import { useEffect, useState } from "react";
 import { getCity, getWeatherByCord, getWeatherByCity } from "./helper";
 
-let INIT_CITY = "Ranchi";
-
 export default function SearchBox({ updateInfo }) {
   let [city, setCity] = useState("");
   let [error, setError] = useState(false);
