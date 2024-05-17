@@ -1,65 +1,74 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy Node.js app to Azure Web App - React-Weather-App
+name: Build and deploy Node.js app to Azure Web App - {ReactWeatherApp}
 
+# Run the workflow whenever change is pushed into the main branch
 on:
   push:
     branches:
-      - master
+      - main
   workflow_dispatch:
 
+# Optional: environment variables can be injected here
+# You can add these variables in your repository Settings - Secrets and variables - Actions - variables
+env:
+  YOUR_AZURE_WEBAPP_NAME: ReactWeatherApp # set this to your application's name
+  YOUR_AZURE_WEBAPP_SLOT_NAME: Production # set this to your application's slot name
+  YOUR_AZURE_WEBAPP_PACKAGE_PATH: "." # set this to the path to your web app project, defaults to the repository root
+  YOUR_NODE_VERSION: "18.x" # set this to the node version to use
+  YOUR_ZIP_PACKAGE_NAME: "app-release.zip"
+
+# There are two jobs in this workflow - build and deploy
 jobs:
+  # Builds the application for production.
+  # You should configure this environment as close as possible to the production environment, e.g. using Ubuntu for Linux apps, using the same Node version
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
 
       - name: Set up Node.js version
         uses: actions/setup-node@v3
         with:
-          node-version: '18.x'
+          node-version: "18.x"
 
-      - name: npm install, build, and test
+      - name: Install dependencies, build, and test
         run: |
           npm install
           npm run build --if-present
           npm run test --if-present
-      
+        # Other scripts if configured should be added here, such as linting, formating
+
+      - name: Zip artifact to upload
+        run: zip -r ${{ env.YOUR_ZIP_PACKAGE_NAME }} ${{ env.YOUR_AZURE_WEBAPP_PACKAGE_PATH }}
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
           name: node-app
-          path: .
+          path: dist # This should be your distribution path, not the root path
 
+  # Deploy the application to Azure
   deploy:
     runs-on: ubuntu-latest
     needs: build
     environment:
-      name: 'Production'
+      name: "Production"
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    permissions:
-      id-token: write #This is required for requesting the JWT
 
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
-          name: node-app
-      
-      - name: Login to Azure
-        uses: azure/login@v1
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_17D0D1664C074D03B2A17E3458FAC905 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_C14C2CDEC4E5414B81577AF2BC121AFC }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_493FD146115F44648B7640F469245BB4 }}
+          name: ${{ env.YOUR_AZURE_WEBAPP_NAME }}
 
-      - name: 'Deploy to Azure Web App'
-        uses: azure/webapps-deploy@v2
+      - name: "Deploy to Azure Web App"
         id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
         with:
-          app-name: 'React-Weather-App'
-          slot-name: 'Production'
-          package: .
-          
+          app-name: "ReactWeatherApp"
+          slot-name: "Production"
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }} # Publish profile should always be stored as secrets in your repository Settings - Secrets and variables - Actions - secrets
+          package: ${{ env.YOUR_AZURE_WEBAPP_PACKAGE_PATH }}/${{ env.YOUR_ZIP_PACKAGE_NAME }}
