@@ -1,14 +1,14 @@
 {
-  "homepage": "https://mdadnanhusaain.github.io/ReactWeatherApp/",
-  "name": "mini-project-react",
+  "name": "ReactWeatherApp",
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://mdadnanhusaain.github.io/ReactWeatherApp/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "predeploy":"npm run build",
-    "deploy":"gh-pages -d dist",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
     "preview": "vite preview",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0"
   },
