@@ -5,7 +5,6 @@ let getCity = async (position) => {
   let limit = 1;
   let lat = position.coords.latitude;
   let lon = position.coords.longitude;
-  console.log(api_key);
   let url = `https://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=${limit}&appid=${api_key}`;
   try {
     let response = await fetch(url);
@@ -19,7 +18,6 @@ let getCity = async (position) => {
 };
 
 let searchPhotos = async (searchQuery) => {
-  console.log(vite_unsplash);
   let url = `https://api.unsplash.com/search/photos?page=1&perPage=1&query=${searchQuery}&client_id=${vite_unsplash}&total=1`;
   let res = await fetch(url);
   let jRes = await res.json();
