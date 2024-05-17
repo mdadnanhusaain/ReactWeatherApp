@@ -1,5 +1,4 @@
 import "./WeatherApp.css";
-
 import { useEffect, useState } from "react";
 import InfoBox from "./InfoBox";
 import SearchBox from "./SearchBox";
